@@ -1,4 +1,4 @@
-## ⚙️ Configuración y ejecución local
+### Configuración y ejecución local
 
 ### Requisitos previos
 
@@ -11,7 +11,7 @@
 npm install
 
 
-### 4. Configurar variables de entorno
+### Configurar variables de entorno
 
 cp .env.example .env
 
