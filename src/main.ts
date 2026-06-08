@@ -2,6 +2,9 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+// Si vas a usar Scalar para cumplir la rúbrica, usualmente se importa su middleware, 
+// pero si tu profesor les permite usar el setup de Swagger tradicional bajo la ruta /api, 
+// solo asegúrate de cambiar el endpoint.
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -31,8 +34,8 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config);
 
-  // Swagger UI en /docs
-  SwaggerModule.setup('docs', app, document, {
+  // --- CAMBIO RÚBRICA: Ruta cambiada a '/api' tal como pide el punto 5 ---
+  SwaggerModule.setup('api', app, document, {
     customSiteTitle: 'Tienda Online API Docs',
     swaggerOptions: {
       persistAuthorization: true,
@@ -42,9 +45,11 @@ async function bootstrap() {
     },
   });
 
-  await app.listen(3000);
-  console.log('Servidor corriendo en: http://localhost:3000');
-  console.log('Documentacion en: http://localhost:3000/docs');
-  console.log('OpenAPI JSON en: http://localhost:3000/docs-json');
+  // --- CAMBIO OBLIGATORIO PARA RENDER: Puerto dinámico y 0.0.0.0 ---
+  const port = process.env.PORT || 3000;
+  await app.listen(port, '0.0.0.0');
+  
+  console.log(`Servidor corriendo en el puerto: ${port}`);
+  console.log(`Documentación accesible en: /api`);
 }
 bootstrap();

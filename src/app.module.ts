@@ -11,12 +11,18 @@ import { OrdenProductoModule } from './orden-producto/orden-producto.module';
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST || 'localhost',
-      port: parseInt(process.env.DB_PORT) || 5432,
+      port: parseInt(process.env.DB_PORT, 10) || 5432, // Añadido el argumento 10 a parseInt (buena práctica)
       username: process.env.DB_USERNAME || 'postgres',
       password: process.env.DB_PASSWORD || 'postgres',
       database: process.env.DB_NAME || 'tienda_online',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true, // Solo para desarrollo
+      synchronize: true, // Requerido por la práctica para producción en esta entrega
+
+      // --- CORRECCIÓN CRÍTICA PARA RENDER ---
+      // Si estamos en Render (producción), activa SSL. Si estás en localhost, lo ignora.
+      ssl: process.env.NODE_ENV === 'production' 
+        ? { rejectUnauthorized: false } 
+        : false,
     }),
     ClientesModule,
     CategoriasModule,
